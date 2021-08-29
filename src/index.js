@@ -6,26 +6,44 @@ const reducer = (state = 0, action) => {
             return state + 1;
         case 'DEC':
             return state - 1;
+        case 'RND':
+            return state + action.value;
         default:
             return 0;
     }
 }
 
-const store = createStore(reducer);
-console.log(store.getState());
+// action creater
+const inc = () => ({type: 'INC'});
+const dec = () => ({type: 'DEC'});
+const rnd = (value) => ({type: 'RND', value});
 
-store.subscribe(() => {
-    console.log(store.getState());
+const store = createStore(reducer);
+
+document.getElementById('inc').addEventListener('click', () => {
+    store.dispatch(inc());
+});
+
+document.getElementById('dec').addEventListener('click', () => {
+    store.dispatch(dec());
+});
+document.getElementById('rnd').addEventListener('click', () => {
+    const value = Math.floor(Math.random() * 10);
+    store.dispatch(rnd(value));
 })
 
-store.dispatch({type: 'INC'});
-store.dispatch({type: 'INC'});
-store.dispatch({type: 'INC'});
+const update = () => {
+    document.getElementById('counter').textContent = store.getState();
+}
 
+store.subscribe(update)
 
-
-// let state = reducer(undefined, {});
-// state = reducer(state, {type: 'INC'});
-// console.log(state);
-// state = reducer(state, {type: 'INC'});
-// console.log(state);
+// console.log(store.getState());
+//
+// store.subscribe(() => {
+//     console.log(store.getState());
+// })
+//
+// store.dispatch({type: 'INC'});
+// store.dispatch({type: 'INC'});
+// store.dispatch({type: 'INC'});
